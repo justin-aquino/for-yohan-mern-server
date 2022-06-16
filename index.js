@@ -14,7 +14,7 @@ app.use("/users", require("./controllers/users"));
 // app.use("/api-v1/inventory", require("./controllers/api-v1/inventory"));
 
 app.get("/", (req, res) => {
-  res.send("Hello");
+  res.send("Hello whats up");
 });
 
 app.listen(PORT, () => {
