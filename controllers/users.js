@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const db = require("../../models");
-const requiresToken = require("../requiresToken");
+const db = require("../models");
+// const requiresToken = require("../requiresToken");
 
 // GET users
 router.get("/", async (req, res) => {
@@ -57,7 +57,8 @@ router.post("/register", async (req, res) => {
   try {
     // check if the user exists, dont allow to sign up again
     const userCheck = await db.Users.findOne({
-      $or: [{ email: req.body.email }, { username: req.body.username }],
+      // $or: [{ email: req.body.email }, { username: req.body.username }],
+      $or: [{ email: req.body.email }],
     });
     if (userCheck)
       return res.status(409).json({ msg: "Email/Username already in use." });
@@ -68,20 +69,19 @@ router.post("/register", async (req, res) => {
 
     // create a user in the db
     const newUser = await db.Users.create({
-      username: req.body.username,
+      // username: req.body.username,
+      email: req.body.email,
       firstname: req.body.firstname,
       lastname: req.body.lastname,
-      email: req.body.email,
-      password: hashedPassword,
-      manager: req.body.manager,
+      password: hashedPassword
     });
 
     // create a jwt payload to send back to the client
     const payload = {
-      username: newUser.username,
+      // username: newUser.username,
       email: newUser.email,
       id: newUser.id,
-      manager: newUser.manager,
+      // manager: newUser.manager,
       firstname: newUser.firstname,
       lastname: newUser.lastname,
     };
